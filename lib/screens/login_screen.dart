@@ -11,6 +11,7 @@ class Home_Screen extends StatefulWidget {
 class _Home_ScreenState extends State<Home_Screen> {
   final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  bool _senhaVisivel = false;
 
   final usuario = "alunosenai";
   final senha = "12345678";
@@ -21,7 +22,8 @@ class _Home_ScreenState extends State<Home_Screen> {
   late final encrypt.Encrypted encrypted;
   late final String senhaCriptografada;
 
-  String resultado = "";
+  String resultadoSenha = "";
+  String resultadoUsuario = "";
 
   @override
   void initState() {
@@ -37,39 +39,102 @@ class _Home_ScreenState extends State<Home_Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login Senai'), centerTitle: true),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _usuarioController,
-              decoration: InputDecoration(labelText: 'Usuário'),
-            ),
-            TextField(
-              controller: _senhaController,
-              decoration: InputDecoration(labelText: 'Senha'),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: _autenticarSenha,
-                  child: Text('Enviar'),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              resultado,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: resultado == "Acesso aceito" ? Colors.green : Colors.red,
+      backgroundColor: Color(0xFFF8F8F8),
+      body: Center(
+
+        child: Container(
+          padding: EdgeInsets.all(40),
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "LOGIN",
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 22),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              TextField(
+                controller: _usuarioController,
+                decoration: InputDecoration(
+                  labelText: 'Usuário',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: Icon(Icons.person),
+                ),
+              ),
+              SizedBox(height: 7),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  resultadoUsuario,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              TextField(
+                controller: _senhaController,
+                obscureText: !_senhaVisivel,
+                decoration: InputDecoration(
+                  labelText: 'Senha',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _senhaVisivel ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _senhaVisivel = !_senhaVisivel; // Toggle
+                      });
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(height: 7),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  resultadoSenha,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: _autenticarSenha,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text('Entrar', 
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -84,13 +149,18 @@ class _Home_ScreenState extends State<Home_Screen> {
       iv: iv,
     );
 
-    String resposta =
-        (senhaDigitada == senhaDescriptografada && usuarioDigitado == usuario)
-            ? "Acesso aceito"
-            : "Acesso Negado";
+    String respostaSenha =
+        (senhaDigitada == senhaDescriptografada)
+            ? ""
+            : "Senha Incorreta";
+
+    String respostaUsuario = (usuarioDigitado == usuario)
+      ? ""
+      : "Usuário Incorreto";
 
     setState(() {
-      resultado = resposta;
+      resultadoSenha = respostaSenha;
+      resultadoUsuario = respostaUsuario;
     });
   }
 }
