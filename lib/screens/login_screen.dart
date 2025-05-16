@@ -1,14 +1,15 @@
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
+import 'package:tela_login/screens/home_screen.dart';
 
-class Home_Screen extends StatefulWidget {
-  const Home_Screen({super.key});
+class Login_Screen extends StatefulWidget {
+  const Login_Screen({super.key});
 
   @override
-  State<Home_Screen> createState() => _Home_ScreenState();
+  State<Login_Screen> createState() => _Login_ScreenState();
 }
 
-class _Home_ScreenState extends State<Home_Screen> {
+class _Login_ScreenState extends State<Login_Screen> {
   final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   bool _senhaVisivel = false;
@@ -41,7 +42,6 @@ class _Home_ScreenState extends State<Home_Screen> {
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
       body: Center(
-
         child: Container(
           padding: EdgeInsets.all(40),
           margin: EdgeInsets.symmetric(horizontal: 20),
@@ -73,10 +73,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   resultadoUsuario,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.red
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.red),
                 ),
               ),
               SizedBox(height: 15),
@@ -106,10 +103,7 @@ class _Home_ScreenState extends State<Home_Screen> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   resultadoSenha,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.red
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.red),
                 ),
               ),
               SizedBox(height: 20),
@@ -119,16 +113,18 @@ class _Home_ScreenState extends State<Home_Screen> {
                   ElevatedButton(
                     onPressed: _autenticarSenha,
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
                       backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text('Entrar', 
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
+                    child: Text(
+                      'Entrar',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
@@ -150,13 +146,18 @@ class _Home_ScreenState extends State<Home_Screen> {
     );
 
     String respostaSenha =
-        (senhaDigitada == senhaDescriptografada)
-            ? ""
-            : "Senha Incorreta";
+        (senhaDigitada == senhaDescriptografada) ? "" : "Senha Incorreta";
 
-    String respostaUsuario = (usuarioDigitado == usuario)
-      ? ""
-      : "Usuário Incorreto";
+    String respostaUsuario =
+        (usuarioDigitado == usuario) ? "" : "Usuário Incorreto";
+
+    if (senhaDigitada == senhaDescriptografada && usuarioDigitado == usuario) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen(nomeUsuario: usuario)),
+      );
+      return;
+    }
 
     setState(() {
       resultadoSenha = respostaSenha;
