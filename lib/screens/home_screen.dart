@@ -9,6 +9,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF8F8F8),
       body: Center(
         child: Container(
           padding: EdgeInsets.all(40),
@@ -47,7 +48,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                      child: Text(
-                      "Logout"
+                      "Logout",
+                      style: TextStyle(color: Colors.white),
+              
                     ),
                   )
                 ],
